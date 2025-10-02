@@ -11,3 +11,11 @@ dotenv.config ({
 
 
 connectDB()
+.then(() => { //here we used callback function because we want to start server only after DB is connected
+    app.listen (process.env.PORT || 8000, ()=>{ 
+        console.log(`Server is running at port ${process.env.PORT || 8000}`);
+    })
+})
+.catch ((err)=>{
+    console.log("Error in DB connection", err);
+})
