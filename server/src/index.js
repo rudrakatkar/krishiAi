@@ -19,3 +19,7 @@ connectDB()
 .catch ((err)=>{
     console.log("Error in DB connection", err);
 })
+//this .then and .catch is used because connectDB is an async function which returns a promise so we have to use then and catch to handle the promise
+
+//we can also use async await here but then we have to use IIFE (Immediately Invoked Function Expression) to call the async function immediately after defining it
+//.then and .catch are java script promise methods to handle the promise returned by an async function
