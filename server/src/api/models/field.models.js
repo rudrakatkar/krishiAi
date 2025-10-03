@@ -1,66 +1,38 @@
 import mongoose from 'mongoose';
-const { Schema } = mongoose;
 
-const predictionSchema = new Schema({
-  status: {
-    type: String,
+const farmSchema = new mongoose.Schema({
+  // Reference to the user who owns this farm
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // This creates the link to the 'User' model
     required: true,
-    enum: ['PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'],
-    default: 'PENDING',
   },
-  satelliteData: {
-    ndvi: { type: Number },
-    moisture: { type: Number },
-    bsi: { type: Number },
-  },
-  micronutrients: {
-    nitrogen: { type: Number },
-    phosphorus: { type: Number },
-    potassium: { type: Number },
-  },
-  predictedYield: {
-    type: Number,
-  },
-  modelVersion: {
-    type: String,
-    default: '1.0.0'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
-
-const fieldSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Field name is required.'],
+    required: true,
     trim: true,
   },
-  geometry: {
+  // GeoJSON object for storing the farm's boundary
+  boundary: {
     type: {
       type: String,
-      enum: ['Polygon'],
+      enum: ['Polygon'], // The type must always be 'Polygon'
       required: true,
     },
     coordinates: {
-      type: [[[Number]]],
+      type: [[[Number]]], // Array of linear ring coordinate arrays
       required: true,
     },
   },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  predictions: [predictionSchema],
 }, {
+  // Automatically adds 'createdAt' and 'updatedAt' fields
   timestamps: true,
 });
 
-fieldSchema.index({ geometry: '2dsphere' });
+// Create a 2dsphere index on the boundary field for geospatial queries
+farmSchema.index({ boundary: '2dsphere' });
 
-const Field = mongoose.model('Field', fieldSchema);
+const Farm = mongoose.model('Farm', farmSchema);
 
-export default Field;
+export default Farm;
 

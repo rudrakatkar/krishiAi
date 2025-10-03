@@ -11,6 +11,7 @@ dotenv.config ({
 
 
 connectDB()
+//connectDB is an async function which returns a promise so we have to use then and catch to handle the promise
 .then(() => { //here we used callback function because we want to start server only after DB is connected
     app.listen (process.env.PORT || 8000, ()=>{ 
         console.log(`Server is running at port ${process.env.PORT || 8000}`);
