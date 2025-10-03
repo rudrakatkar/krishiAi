@@ -1,3 +1,4 @@
+// This file is the entry point of the server application. It sets up the server, connects to the database, and starts listening for incoming requests.
 import mongoose from "mongoose";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
@@ -7,10 +8,8 @@ dotenv.config ({
     path: './env' //this is used because we have to configure import dotenv because we are not using it given by default from library
 })
 
-
-
-
 connectDB()
+
 //connectDB is an async function which returns a promise so we have to use then and catch to handle the promise
 .then(() => { //here we used callback function because we want to start server only after DB is connected
     app.listen (process.env.PORT || 8000, ()=>{ 
